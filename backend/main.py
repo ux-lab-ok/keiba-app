@@ -21,9 +21,14 @@ logger = logging.getLogger(__name__)
 
 app = FastAPI(title="Keiba AI", version="1.0.0")
 
+_origins = os.getenv(
+    "ALLOW_ORIGINS",
+    "http://localhost:5173,http://localhost:3000,https://keiba-app-ruddy.vercel.app"
+).split(",")
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://localhost:3000"],
+    allow_origins=_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
