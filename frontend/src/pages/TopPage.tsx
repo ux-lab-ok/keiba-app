@@ -64,7 +64,7 @@ export default function TopPage() {
   // Fetch available race dates on mount
   useEffect(() => {
     axios.get<{ dates: string[] }>('/api/available-dates').then(r => {
-      const dates = r.data.dates
+      const dates = Array.isArray(r.data.dates) ? r.data.dates : []
       setAvailableDates(dates)
       if (dates.length > 0 && !selectedDate) {
         // Default to today if available, else nearest upcoming
