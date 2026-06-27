@@ -74,20 +74,32 @@ export interface Stats {
   roi: number
 }
 
+const safeArray = <T>(v: unknown): T[] => (Array.isArray(v) ? (v as T[]) : [])
+const safeObject = <T>(v: unknown, key: string): T | null =>
+  v !== null && typeof v === 'object' && key in (v as object) ? (v as T) : null
+
 export const fetchAvailableDates = () =>
-  api.get<{ dates: string[] }>('/available-dates').then(r => r.data.dates)
+  api.get<{ dates: string[] }>('/available-dates')
+    .then(r => safeArray<string>(r.data?.dates))
+    .catch((): string[] => [])
 
 export const fetchRaces = (dateStr?: string) =>
-  api.get<Race[]>('/races', { params: dateStr ? { date_str: dateStr } : {} }).then(r => r.data)
+  api.get<Race[]>('/races', { params: dateStr ? { date_str: dateStr } : {} })
+    .then(r => safeArray<Race>(r.data))
+    .catch((): Race[] => [])
 
 export const fetchRaceDetail = (raceId: string) =>
   api.get<RaceDetail>(`/races/${raceId}`).then(r => r.data)
 
 export const fetchTodayPredictions = () =>
-  api.get<{ race: Race; value_picks: Horse[] }[]>('/predictions/today').then(r => r.data)
+  api.get<{ race: Race; value_picks: Horse[] }[]>('/predictions/today')
+    .then(r => safeArray<{ race: Race; value_picks: Horse[] }>(r.data))
+    .catch((): { race: Race; value_picks: Horse[] }[] => [])
 
 export const fetchBets = () =>
-  api.get<BetRecord[]>('/bets').then(r => r.data)
+  api.get<BetRecord[]>('/bets')
+    .then(r => safeArray<BetRecord>(r.data))
+    .catch((): BetRecord[] => [])
 
 export const createBet = (payload: Partial<BetRecord>) =>
   api.post<BetRecord>('/bets', payload).then(r => r.data)
@@ -96,7 +108,9 @@ export const updateBetResult = (betId: number, result: string, payout: number) =
   api.patch<BetRecord>(`/bets/${betId}/result`, { result, payout }).then(r => r.data)
 
 export const fetchFavorites = () =>
-  api.get<{ id: number; horse_id: string; name: string }[]>('/favorites').then(r => r.data)
+  api.get<{ id: number; horse_id: string; name: string }[]>('/favorites')
+    .then(r => safeArray<{ id: number; horse_id: string; name: string }>(r.data))
+    .catch((): { id: number; horse_id: string; name: string }[] => [])
 
 export const addFavorite = (horse_id: string, name: string) =>
   api.post('/favorites', { horse_id, name }).then(r => r.data)
@@ -105,10 +119,14 @@ export const removeFavorite = (horse_id: string) =>
   api.delete(`/favorites/${horse_id}`).then(r => r.data)
 
 export const fetchFavoriteRaces = () =>
-  api.get<{ horse: Horse; race: Race }[]>('/favorites/races').then(r => r.data)
+  api.get<{ horse: Horse; race: Race }[]>('/favorites/races')
+    .then(r => safeArray<{ horse: Horse; race: Race }>(r.data))
+    .catch((): { horse: Horse; race: Race }[] => [])
 
 export const fetchStats = () =>
-  api.get<Stats>('/stats').then(r => r.data)
+  api.get<Stats>('/stats')
+    .then(r => safeObject<Stats>(r.data, 'total_bets'))
+    .catch((): Stats | null => null)
 
 export const refreshOdds = (raceId: string) =>
   api.post(`/races/${raceId}/refresh-odds`).then(r => r.data)

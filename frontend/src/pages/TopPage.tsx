@@ -84,10 +84,12 @@ export default function TopPage() {
     { enabled: !!selectedDate, staleTime: 5 * 60_000 }
   )
 
-  const grouped = races?.reduce<Record<string, Race[]>>((acc, r) => {
-    acc[r.venue] = [...(acc[r.venue] ?? []), r]
-    return acc
-  }, {}) ?? {}
+  const grouped = Array.isArray(races)
+    ? races.reduce<Record<string, Race[]>>((acc, r) => {
+        acc[r.venue] = [...(acc[r.venue] ?? []), r]
+        return acc
+      }, {})
+    : {}
 
   return (
     <div>
