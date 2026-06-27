@@ -1,0 +1,74 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --screen-max-width: 430px;
+  --content-margin: 16px;
+  --safe-top: env(safe-area-inset-top);
+  --safe-bottom: env(safe-area-inset-bottom);
+  --tabbar-height: 56px;
+  --tap-min: 44px;
+  --radius-card: 16px;
+  --radius-button: 12px;
+  --radius-chip: 8px;
+  --font-title: 20px;
+  --font-heading: 17px;
+  --font-body: 15px;
+  --font-caption: 13px;
+  --mark-honmei: #E5484D;
+  --mark-taikou: #3E63DD;
+  --mark-tanana: #30A46C;
+  --mark-renka:  #8B8D98;
+  --mark-ana:    #8E4EC6;
+  --bg: #0F1115;
+  --surface: #1A1D24;
+  --text: #ECEDEE;
+  --text-sub: #9BA1A6;
+  --accent: #1F8A4C;
+}
+
+@layer base {
+  body {
+    background-color: var(--bg);
+    color: var(--text);
+    font-size: var(--font-body);
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+
+@layer components {
+  .card {
+    @apply rounded-2xl p-4 border border-white/10;
+    background-color: var(--surface);
+  }
+  .btn-primary {
+    @apply text-white font-bold py-3 px-6 rounded-xl text-base active:opacity-80 transition-opacity;
+    background-color: var(--accent);
+  }
+  .btn-next {
+    @apply w-full text-white font-bold rounded-2xl text-base active:opacity-80 transition-opacity;
+    background-color: var(--accent);
+    height: var(--tap-min);
+    min-height: 48px;
+  }
+  .btn-ghost {
+    @apply bg-white/10 text-white font-semibold py-2 px-4 rounded-xl text-sm active:opacity-70 transition-opacity;
+  }
+  .badge-grade {
+    @apply text-xs font-bold px-2 py-0.5 rounded-full;
+  }
+  .value-positive {
+    @apply font-bold;
+    color: var(--accent);
+  }
+  .value-negative {
+    @apply text-gray-400;
+  }
+  /* 印 mark badges */
+  .mark-◎ { background-color: var(--mark-honmei); color: #fff; }
+  .mark-○ { background-color: var(--mark-taikou); color: #fff; }
+  .mark-▲ { background-color: var(--mark-tanana); color: #fff; }
+  .mark-△ { background-color: var(--mark-renka);  color: #fff; }
+  .mark-× { background-color: var(--mark-ana);    color: #fff; }
+}
