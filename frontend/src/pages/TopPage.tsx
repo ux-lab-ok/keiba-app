@@ -2,8 +2,7 @@ import { useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
 import { useNavigate } from 'react-router-dom'
 import { RefreshCw } from 'lucide-react'
-import { fetchRaces, type Race } from '../api'
-import axios from 'axios'
+import { fetchRaces, fetchAvailableDates, type Race } from '../api'
 import clsx from 'clsx'
 
 const GRADE_COLORS: Record<string, string> = {
@@ -63,18 +62,16 @@ export default function TopPage() {
 
   // Fetch available race dates on mount
   useEffect(() => {
-    axios.get<{ dates: string[] }>('/api/available-dates').then(r => {
-      const dates = Array.isArray(r.data.dates) ? r.data.dates : []
+    fetchAvailableDates().then(dates => {
       setAvailableDates(dates)
       if (dates.length > 0 && !selectedDate) {
-        // Default to today if available, else nearest upcoming
         const today = new Date().toISOString().slice(0, 10).replace(/-/g, '')
         const todayMatch = dates.find(d => d >= today)
         setSelectedDate(todayMatch ?? dates[dates.length - 1])
+      } else if (dates.length === 0) {
+        const today = new Date().toISOString().slice(0, 10).replace(/-/g, '')
+        setSelectedDate(today)
       }
-    }).catch(() => {
-      const today = new Date().toISOString().slice(0, 10).replace(/-/g, '')
-      setSelectedDate(today)
     })
   }, [])
 
