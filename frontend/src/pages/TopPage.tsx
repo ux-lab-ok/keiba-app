@@ -100,7 +100,7 @@ export default function TopPage() {
         </div>
 
         {/* Date tabs */}
-        {availableDates.length > 0 ? (
+        {availableDates.length > 0 && (
           <div className="flex gap-2 overflow-x-auto pb-1 -mx-1 px-1">
             {availableDates.map(d => (
               <button
@@ -117,8 +117,6 @@ export default function TopPage() {
               </button>
             ))}
           </div>
-        ) : (
-          <div className="h-8 bg-keiba-border/30 rounded-full animate-pulse" />
         )}
       </div>
 
