@@ -59,6 +59,7 @@ function BottomNav({ noteCount }: { noteCount: number }) {
     { to: '/', label: 'ホーム', icon: '🏠', end: true },
     { to: '/yoso', label: '予想', icon: '🎯', end: false },
     { to: '/note', label: 'ノート', icon: '📝', end: false, badge: noteCount },
+    { to: '/ai', label: 'AI', icon: '🤖', end: false },
     { to: '/mypage', label: 'マイ', icon: '👤', end: false },
   ]
   return (
